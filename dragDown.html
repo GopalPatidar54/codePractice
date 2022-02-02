@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<style>
+  #right_panel {
+    position: absolute;
+    width: 96px;
+    padding-left: 4px;
+    height: 100%;
+    right: 0;
+    background-color: #f0f0f0;
+  }
+
+  #left_panel {
+    position: absolute;
+    width: 96px;
+    padding-right: 4px;
+    height: 100%;
+    left: 0;
+    background-color: #f0f0f0;
+  }
+
+  #resize {
+    background-color: #ccc;
+    position: absolute;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    cursor: w-resize;
+  }
+</style>
+<html>
+  <body>
+    <div id="right_panel">
+      <div id="resize"></div>
+    </div>
+
+    <div id="left_panel">
+      <div id="resize"></div>
+    </div>
+
+    <script>
+      const BORDER_SIZE = 4;
+      const rightPanel = document.getElementById("right_panel");
+
+      let m_pos;
+      function resize(e) {
+        const dx = m_pos - e.x;
+        m_pos = e.x;
+        rightPanel.style.width = parseInt(getComputedStyle(rightPanel, "").width) + dx + "px";
+      }
+
+      rightPanel.addEventListener(
+        "mousedown",
+        function (e) {
+          if (e.offsetX < BORDER_SIZE) {
+            m_pos = e.x;
+            document.addEventListener("mousemove", resize, false);
+          }
+        },
+        false
+      );
+
+      //
+      const leftPanel = document.getElementById("left_panel");
+
+      let m_posLeft;
+      function resizeLeft(e) {
+        const dx = m_posLeft - e.x;
+        m_posLeft = e.x;
+        leftPanel.style.width = parseInt(getComputedStyle(leftPanel, "").width) + dx + "px";
+      }
+
+      leftPanel.addEventListener(
+        "mousedown",
+        function (e) {
+          if (e.offsetX < BORDER_SIZE) {
+            m_posLeft = e.x;
+            document.addEventListener("mousemove", resizeLeft, false);
+          }
+        },
+        false
+      );
+
+      //
+      document.addEventListener(
+        "mouseup",
+        function () {
+          document.removeEventListener("mousemove", resizeLeft, false);
+        },
+        false
+      );
+    </script>
+  </body>
+</html>
